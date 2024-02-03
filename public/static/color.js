@@ -40,10 +40,10 @@ const colorMode = localStorage.getItem('colorMode'); // 获取色彩模式配置
 		followBrowser(); // 跟随浏览器
 		document.addEventListener('DOMContentLoaded', function () { // 弹出提示
 			Swal.fire({
-				title: '色彩配置有误',
-				html: '色彩模式配置出现错误，已重置配置！<br/>按 OK 刷新页面。',
+				title: 'Wrong color configuration',
+				html: 'There was an error in the color mode configuration and the configuration has been reset! <br/>Press OK to refresh the page.',
 				icon: 'warning',
-				footer: '<a href="./#/usersettings" target="_blank">点此去修改颜色模式的页面</a>'
+				footer: '<a href="./#/usersettings" target="_blank">Click here to go to the color mode modification page</a>'
 			}).then(function () {
 				location.reload(); // 重载页面
 			});

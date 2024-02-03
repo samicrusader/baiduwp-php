@@ -11,7 +11,7 @@ class CheckDb
         if (config('baiduwp.db')) {
             return $next($request);
         } else {
-            return json(['error' => 500, 'msg' => '未启用数据库，无法使用此功能']);
+            return json(['error' => 500, 'msg' => 'Database isn\'t enabled, feature won\'t work.']);
         }
     }
 }

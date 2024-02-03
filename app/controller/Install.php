@@ -14,7 +14,7 @@ class Install extends BaseController
     public function index()
     {
         return view('admin/install', [
-            'site_name' => 'baiduwp-php 安装向导',
+            'site_name' => 'baiduwp-php installation wizard',
             'program_version' => config('baiduwp.program_version', ''),
         ]);
     }
@@ -24,7 +24,7 @@ class Install extends BaseController
             if ($request->post('ADMIN_PASSWORD', '') !== config('baiduwp.admin_password', '')) {
                 return json([
                     'error' => -1,
-                    'msg' => '管理员密码错误',
+                    'msg' => 'Admin password is incorrect',
                 ]);
             }
 
@@ -40,7 +40,7 @@ class Install extends BaseController
         }
 
         return view('admin/upgrade', [
-            'site_name' => 'baiduwp-php 升级向导',
+            'site_name' => 'baiduwp-php upgrade wizard',
             'program_version' => config('baiduwp.program_version', ''),
         ]);
     }
@@ -136,7 +136,7 @@ EOF;
                 unlink('./../.env');
                 return json([
                     'error' => -1,
-                    'msg' => '数据库初始化失败',
+                    'msg' => 'Database init failure',
                     'trace' => [$e->getMessage(), $e->getTraceAsString()]
                 ]);
             }

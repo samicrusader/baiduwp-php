@@ -18,14 +18,14 @@ class System extends BaseController
         if (!file_exists('./../.env')) {
             return json([
                 'error' => 114514,
-                'msg' => '未安装',
+                'msg' => 'Not installed',
             ]);
         }
         // 检查安装版本和代码版本是否一致
         if (config('baiduwp.program_version') != Index::$version) {
             return json([
                 'error' => 1919810,
-                'msg' => '安装版本和代码版本不一致',
+                'msg' => 'Configured version and code version does not match',
             ]);
         }
 
@@ -36,7 +36,7 @@ class System extends BaseController
         if (config('baiduwp.db')) {
             $data = Db::connect()->table('records')->where('size', '>=', 52428800)->order('id', 'desc')->limit(1)->select();
             $account = [
-                "last_time" => "无解析记录",
+                "last_time" => "N/A",
                 "limit" => null
             ];
             if (count($data)) {

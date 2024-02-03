@@ -17,7 +17,7 @@ class CheckAdmin
         if (!session('admin')) {
             // 判断是否是 json 请求
             if ($request->isJson()) {
-                return json(['error' => 403, 'msg' => '请刷新当前页面登录']);
+                return json(['error' => 403, 'msg' => 'Please refresh and try again']);
             }
             return redirect('/admin/login');
         }

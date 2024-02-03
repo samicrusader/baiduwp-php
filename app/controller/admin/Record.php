@@ -20,7 +20,7 @@ class Record extends Curd
         $count = \think\facade\Db::table('records')->delete(true);
         return json([
             'error' => ($count > 0) ? 0 : -1,
-            'msg' => "已删除{$count}条记录",
+            'msg' => "Deleted {$count} records",
         ]);
     }
 }

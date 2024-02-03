@@ -3,80 +3,78 @@
 <nav>
     <ol class="breadcrumb my-4">
         <li class="breadcrumb-item"><a href="./">baiduwp-php</a></li>
-        <li class="breadcrumb-item"><a href="./install">安装程序</a></li>
+        <li class="breadcrumb-item"><a href="./install">Installation</a></li>
     </ol>
 </nav>
 <div class="alert alert-primary" role="alert">
-    <h4 class="alert-heading">安装提示</h4>
+    <h4 class="alert-heading">Tips</h4>
     <hr>
-    <p>为减少一些不必要的错误，请仔细阅读此安装提示。</p>
-    <p style="color: red;">因百度对 API 进行修改，更新版本后需要设置完整的 Cookie 参数，可通过 抓包 获取。</p>
-    <p>建议使用 宝塔面板/Docker 进行部署。</p>
+    <p>To minimize some unnecessary errors, please read this installation tip carefully.</p>
+    <p style="color: red;">Due to Baidu's modification of the API, after updating the version, you need to set the complete cookie parameters, which can be obtained by grabbing packets.</p>
 
-    <h5>初次安装时请检查：</h5>
+    <h5>Please check at the time of initial installation:</h5>
     <ol>
-        <li>请确认你的 PHP 版本 ≥ 8.0.0.</li>
-        <li>本项目现使用ThinkPHP框架，如果是使用宝塔面板需要在「网站」——「站点设置」——「伪静态」设置 “thinkphp”，然后在「网站目录」中修改「运行目录」为“/public”。</li>
-        <li>请确认当前目录及目录下所有文件 PHP 有足够访问权限。</li>
-        <li>请确认已安装 curl 及其扩展。</li>
-        <li>请确认当前页面正确加载了 JavaScript 文件。如点击按钮无反映说明为正常加载，检查文件是否完整 并 刷新浏览器 一般能解决此问题。</li>
+        <li>Please make sure your PHP version is ≥ 8.0.0.</li>
+        <li>Make sure that PHP has sufficient access rights to the current directory and all files in it.</li>
+        <li>Make sure curl is installed.</li>
+        <li>Please make sure that the JavaScript file is loaded correctly on the current page. Check the browser console for any errors.</li>
     </ol>
-    <h5>软件更新时请检查：</h5>
+    <h5>Please check when the software is updated:</h5>
     <ol>
-        <li>（若启用数据库）数据库已完成备份。</li>
-        <li>请确认当前页面正确加载了 JavaScript 文件。如点击按钮无反映说明为正常加载，检查文件是否完整 并 刷新浏览器 一般能解决此问题。</li>
+        <li>(If database is enabled) The database has been backed up.</li>
+        <li>Please make sure that the JavaScript file is loaded correctly on the current page. Check the browser console for any errors.</li>
     </ol>
-    <h5>软件更新完成后请：</h5>
+    <h5>After updating the software, please:</h5>
     <ol>
-        <li>（如有 CDN 加速）清除 CDN 的缓存。</li>
-        <li>浏览器存在缓存，请按下Ctrl+F5强制刷新，或进入设置页面删除缓存。</li>
+        <li>Clear the CDN cache (if accelerated by a CDN).</li>
+        <li>Browser cache exists, please press Ctrl+F5 to force refresh, or go to the settings page to delete the cache.</li>
     </ol>
     <hr>
-    <h5>使用提示：</h5>
+    <h5>Use the tips:</h5>
     <ol>
-        <li>因使用的是分享接口，存在客户端未限速，本项目显示限速的情况。</li>
-        <li>获取账号的 Cookie 之后不要「退出登录」和「修改密码」，这两种操作会使 Cookie 失效。请使用浏览器的隐身模式获取 Cookie，获取之后直接关闭浏览器。</li>
+        <li>Due to the use of the sharing interface, there is a situation where the client is not speed-limited and the project shows speed-limited.</li>
+        <li>Do not "log out" or "change password" after obtaining a cookie for your account, as these two actions will invalidate the cookie. Please use the incognito mode of your browser to get the cookie, and close the browser directly after getting the cookie.</li>
     </ol>
 </div>
 
 <div class="card">
     <div class="card-header">
-        安装程序
+        Installation
     </div>
     <div class="card-body">
         <form action="install.php" method="post" id="SettingForm">
-            <h5 class="card-title">站点设置</h5>
+            <h5 class="card-title">Site settings</h5>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">管理员密码</label>
+                <label class="col-sm-2 col-form-label">Admin password</label>
                 <div class="col-sm-10">
                     <input class="form-control" name="ADMIN_PASSWORD" value="">
-                    <small class="form-text">为保证安全，需要至少6位以上。</small>
+                    <small class="form-text">Must be 6 characters or longer.</small>
                 </div>
             </div>
-            <p>其他站点设置已移动到管理员设置页面，请安装后前往 admin 查看。</p>
+            <p>Visit the administration panel after site installation for additional settings.</p>
             <hr />
-            <h5 class="card-title">MySQL数据库设置</h5>
+            <h5 class="card-title">Database settings</h5>
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">是否启用数据库</label>
+                <label class="col-sm-2 col-form-label">Use database?</label>
                 <div class="col-sm-10">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="USING_DB" id="USING_DB1" value="true" checked>
                         <label class="form-check-label" for="USING_DB1">
-                            是
+                            Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="USING_DB" id="USING_DB2" value="false">
                         <label class="form-check-label" for="USING_DB2">
-                            否
+                            No
                         </label>
                     </div>
-                    <small class="form-text">如需使用记录解析数据、设置黑\白名单、自动切换限速SVIP账号等功能，需开启数据库。</small>
+                    <small class="form-text">Additional features like account-switching and black/whitelisting requires the database. You will need to reinstall to change this setting.</small>
                 </div>
             </div>
             <div id="DbConfig">
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">数据库类型</label>
+                    <label class="col-sm-2 col-form-label">Type</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="DB_DRIVER">
                             <option value="mysql">MySQL</option>
@@ -85,48 +83,42 @@
                     </div>
                 </div>
                 <div class="form-group row" id="dbhost-field">
-                    <label class="col-sm-2 col-form-label">数据库地址</label>
+                    <label class="col-sm-2 col-form-label">Host</label>
                     <div class="col-sm-10">
                         <input class="form-control" name="DB_HOST" value="127.0.0.1">
-                        <small class="form-text">填入MySQL数据库的地址。</small>
+                        <small class="form-text">Fill the MySQL database host address</small>
                     </div>
                 </div>
                 <div class="form-group row" id="username-field">
-                    <label class="col-sm-2 col-form-label">数据库用户名</label>
+                    <label class="col-sm-2 col-form-label">User</label>
                     <div class="col-sm-10">
                         <input class="form-control" name="DB_USER" value="">
                     </div>
                 </div>
                 <div class="form-group row" id="password-field">
-                    <label class="col-sm-2 col-form-label">数据库密码</label>
+                    <label class="col-sm-2 col-form-label">Password</label>
                     <div class="col-sm-10">
                         <input class="form-control" name="DB_PASS" value="">
                     </div>
                 </div>
                 <div class="form-group row" id="dbname-field">
-                    <label class="col-sm-2 col-form-label">数据库名/Sqlite数据库路径</label>
+                    <label class="col-sm-2 col-form-label">SQLite database path</label>
                     <div class="col-sm-10">
                         <input class="form-control" name="DB_NAME" value="">
-                        <small class="form-text">如果此数据库不存在将会在检查连接时自动创建。</small>
+                        <small class="form-text">If this database does not exist it will be created automatically when the connection is checked.</small>
                     </div>
                 </div>
-                <a href="javascript:CheckMySQLConnect();" class="btn btn-primary">检查数据库连接</a>
+                <a href="javascript:CheckMySQLConnect();" class="btn btn-primary">Check settings</a>
             </div>
             <hr />
             <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="AgreeCheck">
-                <label class="form-check-label" for="AgreeCheck">
-                    <p>我同意在首页及其他页面<strong>保留作者版权信息</strong></p>
-                </label>
-            </div>
-            <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="DisclaimerCheck">
                 <label class="form-check-label" for="DisclaimerCheck">
-                    <p class="text-danger"><strong>我知悉并同意</strong> 我使用本程序仅出于学习研究目的，绝不用于商业用途，产生的任何后果与开源项目开发者无关</p>
+                    <p class="text-danger"><strong>I understand and agree that</strong> use of this program is only for learning and research purposes, never for commercial use, any consequences arising are not the responsibility of the open source project developers.</p>
                 </label>
             </div>
             <!-- 已经读取了配置，没必要确认 -->
-            <a href="javascript:CheckForm();" class="btn btn-primary">提交</a>
+            <a href="javascript:CheckForm();" class="btn btn-primary">Install</a>
             <br><br>
 
 
@@ -150,13 +142,13 @@
                         } else { // 若不正常，返回异常信息
                             return {
                                 success: false,
-                                msg: `服务器返回异常 HTTP 状态码：HTTP ${response.status} ${response.statusText}.`
+                                msg: `The server returned an abnormal HTTP status code: HTTP ${response.status} ${response.statusText}.`
                             };
                         }
                     } catch (reason) { // 若与服务器连接异常
                         return {
                             success: false,
-                            msg: '连接服务器过程中出现异常，消息：' + reason.message
+                            msg: 'An exception occurred during the connection to the server, message:' + reason.message
                         };
                     }
                 }
@@ -199,31 +191,10 @@
                         $('input[name="DB_NAME"]').val('');
                     }
                 });
-                $("#AgreeCheck").on('click', function() {
-                    let item = $(this).prop("checked");
-                    if (item === true) {
-                        // 提示
-                        Swal.fire({
-                            title: "同意保留版权",
-                            html: "保留原作者版权是本项目 MIT 协议所规定的，这是对作者的一种尊重，让作者有继续开发的动力。<hr/>此项目在 GitHub 上开放源代码，所有历史版本及当前版本源代码均公开可查。",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "我同意",
-                            footer: '<a href="https://github.com/yuantuo666/baiduwp-php" target="_blank">GitHub 上的源代码仓库</a>'
-                        }).then(function(e) {
-                            if (e.isConfirmed) {
-                                $("#AgreeCheck").prop("checked", true);
-                            } else {
-                                $("#AgreeCheck").prop("checked", false);
-                            }
-                        });
-                    }
-                });
-
                 let SQLConnect = false;
 
                 function CheckMySQLConnect() {
-                    Swal.fire("正在连接数据库，请稍等");
+                    Swal.fire("Connecting to the database. Please wait...");
                     Swal.showLoading();
                     let driver = $("select[name='DB_DRIVER']").val()
                     let host = $("input[name='DB_HOST']").val();
@@ -238,7 +209,7 @@
                             const data = response.data;
                             if (data.error === 0) {
                                 // 连接成功
-                                Swal.fire("数据库连接成功", "请完成其他信息填写并提交。<br />详细信息：" + data.msg, "success");
+                                Swal.fire("Success!", "Database connection successful. Detailed information: " + data.msg, "success");
                                 $("input[name='DB_HOST']").attr("readonly", true); // 禁用修改，防止提交后出错
                                 $("input[name='DB_USER']").attr("readonly", true);
                                 $("input[name='DB_PASS']").attr("readonly", true);
@@ -246,41 +217,36 @@
                                 SQLConnect = true;
                             } else {
                                 // 连接失败
-                                Swal.fire("数据库连接错误", "请检查你的数据库设置，并重新提交。<br />详细信息：" + data.msg, "error");
+                                Swal.fire("Failed", "Please check your database settings and try again.<br />Detailed information: " + data.msg, "error");
                             }
                         }
                     }).catch(function(reason) {
-                        Swal.fire("连接数据库过程中出现异常", "请检查你的数据库状态及设置<br />详细信息：" + reason.message, "error");
+                        Swal.fire("Exception during connection to database", "Please check your database status and settings<br />Detailed information: " + reason.message, "error");
                     });
 
                 }
 
                 function CheckForm() {
-                    Swal.fire("正在安装，请稍等……");
+                    Swal.fire("Installation is in progress, please wait...");
                     Swal.showLoading();
                     let USING_DB = $("input[name='USING_DB']:checked").val();
                     let ADMIN_PASSWORDLength = $("input[name='ADMIN_PASSWORD']").val().length;
 
                     if (ADMIN_PASSWORDLength < 6) {
                         // 密码过短
-                        Swal.fire("密码过短", "请检查你设置的密码，为保证站点安全，管理员密码必须为6位或6位以上。", "warning");
+                        Swal.fire("Invalid admin password", "The administrator password must be 6 or more characters long.", "warning");
                         return 0;
                     }
                     if (USING_DB === "true") {
                         if (!SQLConnect) {
                             // 暂未连接数据库
-                            Swal.fire("暂未连接数据库", "请先点击检查数据库连接按钮，再提交数据。", "warning");
+                            Swal.fire("Warning", "Make sure the database connection test passes before continuing.", "warning");
                             return 0;
                         }
                     }
-                    let AgreeCheck = $("#AgreeCheck").prop("checked");
-                    if (AgreeCheck === false) {
-                        Swal.fire("请同意保留版权信息", "请同意保留版权信息，再点击提交。", "warning");
-                        return 0;
-                    }
                     let DisclaimerCheck = $("#DisclaimerCheck").prop("checked");
                     if (DisclaimerCheck === false) {
-                        Swal.fire("请同意免责声明", "请同意免责声明，再点击提交。", "warning");
+                        Swal.fire("Please agree to the disclaimer", "Please agree to the disclaimer before clicking submit.", "warning");
                         return 0;
                     }
                     let driver = $("select[name='DB_DRIVER']").val()
@@ -297,16 +263,16 @@
                             const data = response.data;
                             if (data.error === 0) {
                                 // 安装成功
-                                Swal.fire("安装成功", `请前往 ${ROOT_PATH}/admin 查看站点设置。`, "success").then(function(e) {
+                                Swal.fire("Success!", `Redirecting to ${ROOT_PATH}/admin...`, "success").then(function(e) {
                                     window.location.href = `${ROOT_PATH}/admin`;
                                 });
                             } else {
                                 // 安装失败
-                                Swal.fire("安装失败", "请检查你的设置，重新提交。<br />详细信息：" + data.msg, "error");
+                                Swal.fire("Failed", "Please check your settings and resubmit.<br />Detailed information: " + data.msg, "error");
                             }
                         }
                     }).catch(function(reason) {
-                        Swal.fire("安装过程中出现异常", "请检查你的设置，重新提交。<br />详细信息：" + reason.message, "error");
+                        Swal.fire("Failed", "Please check your settings and resubmit.<br />Detailed information: " + reason.message, "error");
                     });
                 }
 
@@ -317,7 +283,7 @@
                         const data = response.data;
                         if (data.error === 0) {
                             // 连接成功
-                            Swal.fire("检测到 Docker 环境", "已自动配置数据库并连接，请完成其他信息填写并提交。<br />详细信息：" + data.msg, "success");
+                            Swal.fire("Docker environment detected", "The database has been automatically configured and connected, please complete the rest of the information and submit.<br />Detailed information: " + data.msg, "success");
                             $("input[name='DB_HOST']").val("172.28.0.2");
                             $("input[name='DB_USER']").val("root");
                             $("input[name='DB_PASS']").val("root");
@@ -329,11 +295,11 @@
                             SQLConnect = true;
                         } else {
                             // 连接失败
-                            console.log("检查 Docker 环境失败", data);
+                            console.log("Checking the Docker environment fails", data);
                         }
                     }
                 }).catch(function(reason) {
-                    console.log("检查 Docker 环境出错", reason);
+                    console.log("Checking for errors in the Docker environment", reason);
                 });
             </script>
     </div>

@@ -53,10 +53,10 @@ let CheckUpdate = localStorage.getItem('UpdateTip') || "true";
 if (CheckUpdate === "true")
 	getAPI('/system/update').then(function (response) {
 		if (!response.success) {
-			console.log('检查更新失败！详细信息：');
+			console.log('Update check failed：');
 			console.log(response);
 		}
-		console.log('检查更新信息：');
+		console.log('New update: ');
 		console.log(response);
 		const data = response.data;
 		if (data.code === 0) {
@@ -65,18 +65,18 @@ if (CheckUpdate === "true")
 				div.id = 'CheckUpdate';
 				div.style.margin = '0.3rem 1rem';
 				div.style.display = 'none';
-				div.innerHTML = `Baiduwp-PHP 项目有新的版本：${data.version}（${data.isPreRelease ? '此版本为预发行版本，' : ''}当前版本为${data.now_version}）！请联系站长更新！
-					&nbsp; <a href="${data.page_url}" target="_blank">发行/下载页面</a><div style="float: right;"><a href="javascript:SetUpdateTip(false);">不再提示</a></div>`;
+				div.innerHTML = `There is a new version of the Baiduwp-PHP project: ${data.version}（${data.isPreRelease ? '(pre-release)' : ''} Current version is ${data.now_version}! Contact the site operator to apply the update.
+					&nbsp; <a href="${data.page_url}" target="_blank">Release/Download page</a><div style="float: right;"><a href="javascript:SetUpdateTip(false);">Don't prompt again</a></div>`;
 				document.body.insertAdjacentElement('beforeBegin', div);
 				if (localStorage.getItem('UpdateTip') !== "false")
 					$('#CheckUpdate').show(1500);
 			}
 		} else if (data.code === 2) {
-			console.log('当前版本为预发行版本，不提示更新。');
+			console.log('The current version is pre-release and does not prompt for updates.');
 		} else if (data.code === 1) {
-			console.log('服务器获取更新失败！详细信息：');
+			console.log('Server failed to get updates! Details:');
 		} else {
-			console.log('服务器获取更新失败，且错误码不在支持列表中！详细信息：');
+			console.log('The server failed to fetch an update and the error code is not in the supported list! Details:');
 		}
 	});
 

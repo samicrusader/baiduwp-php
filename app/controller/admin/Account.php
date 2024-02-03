@@ -63,12 +63,12 @@ class Account extends Curd
 
             return json([
                 'error' => 0,
-                'msg' => "已添加 $count 条记录",
+                'msg' => "Added $count records",
             ]);
         }
         return json([
             'error' => 1,
-            'msg' => '表单错误',
+            'msg' => 'Form error',
         ]);
     }
     private function explodeCookie($ck)
@@ -104,20 +104,20 @@ class Account extends Curd
         if (empty($id)) {
             return json([
                 'error' => 1,
-                'msg' => 'ID不能为空',
+                'msg' => 'ID field must be specified',
             ]);
         }
         if ($id == 'all') {
             $count = Db::table('account')->update(['status' => 0]);
             return json([
                 'error' => ($count > 0) ? 0 : -1,
-                'msg' => "已重置{$count}条记录",
+                'msg' => "{$count} records reset",
             ]);
         }
         Db::table('account')->where('id', $id)->update(['status' => 0]);
         return json([
             'error' => 0,
-            'msg' => "已重置",
+            'msg' => "Reset",
         ]);
     }
 }

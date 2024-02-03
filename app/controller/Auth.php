@@ -16,18 +16,18 @@ class Auth extends BaseController
         if (empty($password)) {
             return json([
                 'status' => 0,
-                'msg' => '无需密码',
+                'msg' => 'No password is required',
             ]);
         }
         if (session('Password') === $password) {
             return json([
                 'status' => 2,
-                'msg' => '已登录',
+                'msg' => 'Logged in!',
             ]);
         }
         return json([
             'status' => 1,
-            'msg' => '未登录'
+            'msg' => 'Not logged in'
         ]);
     }
 

@@ -28,9 +28,9 @@ class Index extends BaseController
             $password = $request->post('password');
             if ($password == config('baiduwp.admin_password')) {
                 session('admin', true);
-                return json(['error' => 0, 'msg' => '登录成功']);
+                return json(['error' => 0, 'msg' => 'Logged in!']);
             } else {
-                return json(['error' => 403, 'msg' => '密码错误']);
+                return json(['error' => 403, 'msg' => 'Password is incorrect']);
             }
         }
         if (session('admin')) {
@@ -44,7 +44,7 @@ class Index extends BaseController
 
     public function info()
     {
-        $text = '未启用数据库，无法统计';
+        $text = 'Database not enabled, no stats available';
         $records = [
             'all_times' => $text,
             'all_flow' => 0,

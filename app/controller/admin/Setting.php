@@ -8,23 +8,23 @@ use app\Request;
 class Setting extends BaseController
 {
     public static $setting = [
-        'site_name' => ['网站名称', 'text', '将会显示在网站标题处'],
-        'program_version' => ['程序版本', 'readonly', ''],
-        'footer' => ['页脚信息', 'textarea', '将会显示在网站底部，支持HTML代码'],
+        'site_name' => ['Website name', 'text', 'Set the website title'],
+        'program_version' => ['Version', 'readonly', ''],
+        'footer' => ['Footer text', 'textarea', 'Change the website footer (HTML tags are supported)'],
 
-        'admin_password' => ['管理员密码', 'text', '后台管理密码，若为空，则无法进入后台管理，否则输入正确密码才能进入后台管理'],
-        'password' => ['首页密码', 'text', '首页解析使用的密码，留空则无密码'],
+        'admin_password' => ['Admin password', 'text', 'Change the password associated with this website'],
+        'password' => ['Access password', 'text', 'Change the password required to enable link parsing (helps with public access)'],
 
-        'db' => ['是否启用数据库', 'readonly', '若启用，则会将解析记录保存到数据库中，否则将不会被保存，如不启用数据库，也无法使用后台管理、限制次数和流量等功能。'],
-        'link_expired_time' => ['链接有效期', 'number', '链接有效期，单位为小时'],
-        'times' => ['解析次数', 'number', '解析次数，单IP每日限制解析次数'],
-        'flow' => ['解析流量', 'number', '解析流量，单IP每日限制解析流量，单位为GB'],
+        'db' => ['Database enabled?', 'readonly', 'If enabled, extra management features are used like account lists and statistics (requires reconfiguration of .env to change)'],
+        'link_expired_time' => ['Link session expiration (in hours)', 'number', 'Change how long until a session associated with a parsed link expires'],
+        'times' => ['Daily link parse limit (by IP)', 'number', 'Change the amount of times an IP address can parse a link per day'],
+        'flow' => ['Daily data limit (by IP, in GB)', 'number', 'Change the amount of data an IP address can transfer per day'],
 
-        'check_speed_limit' => ['限速检测', 'radio', '是否开启限速检测，开启后会在解析时检测限速情况，如超过限速则会标记为限速。只有解析大于 50 MB 的文件同时启用数据库功能才会检测。当数据库所有账号都限速，将自动关闭限速检测并使用下面配置的本地账号解析。'],
-        'random_account' => ['随机账号', 'radio', '是否开启随机账号功能，开启后会在账号列表中随机选择一个账号进行解析，如无可用账号则会使用本地账号。如果不开启则会按顺序使用账号列表中的账号进行解析，如无可用账号则会使用本地账号。'],
+        'check_speed_limit' => ['Detect speed limits', 'radio', 'If this option and the database are enabled, files over 50 MB will be checked for speed limiting (retard note: why?). When all other accounts are limited, the fallback account in the config will be used and this feature will not function.'],
+        'random_account' => ['Randomize account', 'radio', 'If enabled, random accounts in the account list will be used for link parsing. If disabled, accounts in the list will be used sequentially. If there is no available accounts, the fallback account in the config will be used.'],
 
-        'cookie' => ['本地普通账号Cookie', 'textarea', '此处填写普通账号Cookie，可以和SVIP填写一样的Cookie，用于获取百度网盘文件列表，如不填写或填写错误则只能预览，不能生成下载链接。'],
-        'svip_cookie' => ['本地SVIP账号Cookie', 'textarea', '此处填写SVIP账号Cookie，如果不是SVIP账号，获取的下载链接将会限速。如果启用数据库，当数据库无可用账号，将会使用此账号。'],
+        'cookie' => ['Standard account cookie', 'textarea', 'Add the account cookie used for link parsing and downloading.'],
+        'svip_cookie' => ['SVIP account cookie', 'textarea', 'Add the account cookie for high-speed downloads. If database function is enabled, this account will become the fallback account if no other accounts are available.'],
     ];
     public function list(Request $request)
     {
@@ -50,7 +50,7 @@ class Setting extends BaseController
         self::updateConfig($data);
         return json([
             'error' => 0,
-            'msg' => '保存成功',
+            'msg' => 'Saved',
         ]);
     }
     public static function updateConfig($data, $force = false)

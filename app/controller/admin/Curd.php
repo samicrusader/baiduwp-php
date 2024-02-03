@@ -21,7 +21,7 @@ class Curd extends BaseController
         if (!$table) {
             return json([
                 'error' => 1,
-                'msg' => '表名错误',
+                'msg' => 'Table name error',
             ]);
         }
         $data = Db::table($table)->order('id', 'desc')->page($page, 10)->select()->toArray();
@@ -43,13 +43,13 @@ class Curd extends BaseController
         if (!$table || !$id) {
             return json([
                 'error' => 1,
-                'msg' => '表名或ID错误',
+                'msg' => 'Table name or ID field must be specified',
             ]);
         }
         $count = Db::table($table)->where('id', $id)->delete();
         return json([
             'error' => ($count === 1) ? 0 : -1,
-            'msg' => "已删除{$count}条记录",
+            'msg' => "Deleted {$count} records",
         ]);
     }
     public function add(Request $request, $data = [], $table = '')
@@ -58,13 +58,13 @@ class Curd extends BaseController
         if (!$table) {
             return json([
                 'error' => 1,
-                'msg' => '表名错误',
+                'msg' => 'Table name must be specified',
             ]);
         }
         $count = Db::table($table)->insert($data);
         return json([
             'error' => ($count === 1) ? 0 : -1,
-            'msg' => "已添加{$count}条记录",
+            'msg' => "Added {$count} records",
         ]);
     }
     protected function constructData($post, $match)

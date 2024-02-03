@@ -162,7 +162,7 @@ class Parse
 		if (!$fs_id || !$randsk || !$share_id || !$uk) {
 			return [
 				'error' => -1,
-				'msg' => '参数错误',
+				'msg' => 'Parameter error',
 			];
 		}
 		$message = [];
@@ -175,10 +175,10 @@ class Parse
 				// 存在 判断类型
 				if ($data->type === -1) {
 					// 黑名单
-					return array("error" => -1, "msg" => "当前ip已被加入黑名单，请联系站长解封", "ip" => $ip);
+					return array("error" => -1, "msg" => "Your IP address is blacklisted, please contact the site operator to delist.", "ip" => $ip);
 				} elseif ($data->type === 0) {
 					// 白名单
-					$message[] = "当前ip为白名单~ $ip";
+					$message[] = "IP is whitelisted~ $ip";
 					$isipwhite = TRUE;
 				}
 			}
@@ -199,9 +199,9 @@ class Parse
 		$errno = $json4["errno"] ?? 999;
 		if ($errno !== 0) {
 			if (config('app.debug')) {
-				$message[] = "获取下载链接失败: " . json_encode($json4);
+				$message[] = "Failed to parse download link: " . json_encode($json4);
 			} else {
-				$message[] = "获取下载链接失败: " . ($json4["error_msg"] ?? "未知错误");
+				$message[] = "Failed to parse download link: " . ($json4["error_msg"] ?? "unknown error");
 			}
 			return self::downloadError($json4, $message);
 		}
@@ -254,7 +254,7 @@ class Parse
 
 				if ($count > config('baiduwp.times')) {
 					// 提示无权继续
-					return array("error" => 1, "msg" => "今日解析次数已达上限，请明天再试", "ip" => $ip);
+					return array("error" => 1, "msg" => "This site's limit of link parses have been exceeded, try again tomorrow.", "ip" => $ip);
 				}
 				// 获取解析流量
 				$flow = Db::connect()->table('records')->where('ip', $ip)
@@ -262,7 +262,7 @@ class Parse
 					->sum('size');
 				if ($flow > config('baiduwp.flow') * 1024 * 1024 * 1024) {
 					// 提示无权继续
-					return array("error" => 1, "msg" => "今日解析流量已达上限，请明天再试", "ip" => $ip);
+					return array("error" => 1, "msg" => "This site's limit of link parses have been exceeded, try again tomorrow.", "ip" => $ip);
 				}
 			}
 
@@ -288,7 +288,7 @@ class Parse
 		$header = Req::HEAD($dlink, $headerArray); // 禁止重定向
 		if (!strstr($header, "Location")) {
 			// fail
-			$message[] = "获取真实链接失败 $header";
+			$message[] = "real_link acquisition failed: $header";
 		}
 		$header = str_replace("https://", "http://", $header);
 		$real_link = Tool::getSubstr($header, "Location: ", "\r\n"); // delete http://
@@ -298,14 +298,14 @@ class Parse
 			$body = Req::GET($dlink, $headerArray);
 			$body_decode = json_decode($body, true);
 
-			$message[] = "获取真实下载链接失败：" . json_encode($body_decode);
+			$message[] = "failed to acquire download real_link：" . json_encode($body_decode);
 
 			if (config('baiduwp.db') && config('baiduwp.check_speed_limit') && $ID != "-1") {
 				$result = Db::connect()->table('account')->where('id', $ID)->update(['status' => -1]);
 				if ($result) {
-					return array("error" => -1, "msg" => "SVIP账号自动切换成功，请重新请求获取下载地址", "message" => $message);
+					return array("error" => -1, "msg" => "SVIP account was switched, please retry!", "message" => $message);
 				} else {
-					return array("error" => -1, "msg" => "SVIP账号自动切换失败", "message" => $message);
+					return array("error" => -1, "msg" => "SVIP account switching failed, please try again later", "message" => $message);
 				}
 			}
 			return self::realLinkError($body_decode, $message); // 获取真实链接失败
@@ -316,9 +316,9 @@ class Parse
 			if (config('baiduwp.db') && config('baiduwp.check_speed_limit') && $ID != "-1") {
 				$result = Db::connect()->table('account')->where('id', $ID)->update(['status' => -1]);
 				if ($result) {
-					return array("error" => -1, "msg" => "SVIP账号自动切换成功，请重新请求获取下载地址", "message" => $message);
+					return array("error" => -1, "msg" => "SVIP account was switched, please retry!", "message" => $message);
 				} else {
-					return array("error" => -1, "msg" => "SVIP账号自动切换失败", "message" => $message);
+					return array("error" => -1, "msg" => "SVIP account switching failed, please try again later", "message" => $message);
 				}
 			}
 		}
@@ -338,7 +338,7 @@ class Parse
 
 			if (!$result) {
 				// 保存错误
-				return array("error" => -1, "msg" => "数据库保存错误", "message" => $message);
+				return array("error" => -1, "msg" => "Database write error", "message" => $message);
 			}
 		}
 
@@ -384,32 +384,32 @@ class Parse
 		if (empty($Filejson)) {
 			return [
 				"error" => -1,
-				"title" => "获取到的列表为空",
-				"msg" => "请确保已正确设置 Cookie 且服务器网络连接正常",
+				"title" => "File listing is empty",
+				"msg" => "Please check if your cookies are set correctly and if the server has a working Internet connection",
 				"message" => $message
 			];
 		}
 		// 解析异常
 		$ErrorCode = $Filejson["errtype"] ?? ($Filejson["errno"] ?? 999);
 		$ErrorMessage = [
-			"mis_105" => "你所解析的文件不存在~",
+			"mis_105" => "Requested link does not exist",
 			"mispw_9" => "提取码错误",
 			"mispwd-9" => "提取码错误",
-			"mis_2" => "不存在此目录",
-			"mis_4" => "不存在此目录",
-			5 => "不存在此分享链接或提取码错误",
-			3 => "此链接分享内容可能因为涉及侵权、色情、反动、低俗等信息，无法访问！",
-			0 => "啊哦，你来晚了，分享的文件已经被删除了，下次要早点哟。",
-			10 => "啊哦，来晚了，该分享文件已过期",
-			8001 => "普通账号可能被限制，请检查普通账号状态",
-			9013 => "普通账号被限制，请检查普通账号状态",
-			9019 => "普通账号 Cookie 状态异常，请检查：账号是否被限制、Cookie 是否过期（前往网站设置页面修改）",
-			999 => "错误 -> " . json_encode($Filejson)
+			"mis_2" => "Directory does not exist",
+			"mis_4" => "Directory does not exist",
+			5 => "The requested link does not exist or the share code is invalid",
+			3 => "The requested link was blocked by Baidu because it violates the terms of use",
+			0 => "The shared files has been deleted by the owner",
+			10 => "This share has expired",
+			8001 => "Upstream download restriction is in place, try again later...",
+			9013 => "Upstream download restriction is in place, try again later...",
+			9019 => "Upstream download account is broken, try again later...",
+			999 => "Unknown error: -> " . json_encode($Filejson)
 		];
 		return [
 			"error" => -1,
-			"title" => "获取列表错误 ($ErrorCode)",
-			"msg" => $ErrorMessage[$ErrorCode] ?? "未知错误，如多次出现请向提出issue反馈",
+			"title" => "Link parser error ($ErrorCode)",
+			"msg" => $ErrorMessage[$ErrorCode] ?? "Unknown error, if this keeps occuring contact the site operator.",
 			"message" => $message
 		];
 	}
@@ -418,21 +418,21 @@ class Parse
 	{
 		$errno = $json4["errno"] ?? 999;
 		$error = [
-			999 => ["请求错误", "请求百度网盘服务器出错，请检查网络连接或重试"],
-			-20 => ["触发验证码(-20)", "请等待一段时间，再返回首页重新解析。"],
-			-9 => ["文件不存在(-9)", "请返回首页重新解析。"],
-			-6 => ["账号未登录(-6)", "请检查普通账号是否正常登录。"],
-			-1 => ["文件违规(-1)", "您下载的内容中包含违规信息"],
-			2 => ["下载失败(2)", "下载失败，请稍候重试"],
-			112 => ["链接超时(112)", "获取链接超时，每次解析列表后只有5min有效时间，请返回首页重新解析。"],
-			113 => ["传参错误(113)", "获取失败，请检查参数是否正确。"],
-			116 => ["链接错误(116)", "该分享不存在"],
-			118 => ["没有下载权限(118)", "没有下载权限，请求百度服务器时，未传入sekey参数或参数错误。"],
-			110 => ["服务器错误(110)", "服务器错误，可能服务器IP被百度封禁，请切换 IP 或更换服务器重试。"],
-			121 => ["服务器错误(121)", "你选择操作的文件过多，减点试试吧"],
-			8001 => ["普通账号错误(8001)", "普通账号可能被限制，请检查普通账号状态"],
-			9013 => ["普通账号错误(9013)", "普通账号被限制，请检查普通账号状态"],
-			9019 => ["普通账号错误(9019)", "普通账号 Cookie 状态异常，请检查：账号是否被限制、Cookie 是否过期（前往网站设置页面修改）"],
+			999 => ["Upstream error (999)", "An error occured while accessing Baidu, please try again later. If this keeps occuring contact the site operator."], // generic
+			-20 => ["Upstream error (-20)", "An error occured while accessing Baidu, please try again later. If this keeps occuring contact the site operator."], // captcha
+			-9 => ["File does not exist (-9)", "The requested file does not exist. Try reparsing the link."],
+			-6 => ["Account error (-6)", "Upstream account is not logged in, please try again later. If this keeps occuring contact the site operator."],
+			-1 => ["Download blocked (-1)", "This download was blocked by Baidu because the requested file violates the terms of use"],
+			2 => ["Download failure (2)", "An error occured while resolving the download, please try again later."],
+			112 => ["Timed out (112)", "A time out of 5 minutes is in place per download. Please reparse the link and try again."],
+			113 => ["Upstream error (113)", "An error occured while resolving the download, please try again later. If this keeps occuring contact the site operator."], // GET failure, check param(s)
+			116 => ["Download failure (116)", "The requested link does not exist"],
+			118 => ["Account error (118)", "An error occured while resolving the download, please try again later. If this keeps occuring contact the site operator."], // no download permission, check sekey param(s)
+			110 => ["Upstream error (110)", "An error occured while resolving the download, please try again later. If this keeps occuring contact the site operator."], // IP is probably blocked
+			121 => ["Too many files (121)", "Too many files have been selected, please try again with less."],
+			8001 => ["Account error (8001)", "Upstream download restriction is in place, try again later..."],
+			9013 => ["Account error (9013)", "Upstream download restriction is in place, try again later..."],
+			9019 => ["Account error (9019)", "Upstream download account is broken, try again later..."],
 		];
 
 		if (isset($error[$errno])) return [
@@ -443,8 +443,8 @@ class Parse
 		];
 		else return [
 			"error" => -1,
-			"title" => "获取下载链接失败 ($errno)",
-			"msg" => "未知错误！错误：" . json_encode($json4),
+			"title" => "Download link resolver error ($errno)",
+			"msg" => "Unknown error：" . json_encode($json4),
 			"message" => $message
 		];
 	}
@@ -453,18 +453,18 @@ class Parse
 	{
 		$ErrorCode = $body_decode["errno"] ?? ($body_decode["error_code"] ?? 999);
 		$ErrorMessage = [
-			8001 => "SVIP 账号可能被限制，请检查 SVIP 的 Cookie 是否设置正确且有效",
-			9013 => "SVIP 账号被限制，请检查更换 SVIP 账号",
-			9019 => "SVIP 账号可能被限制，请检查 SVIP 的 Cookie 是否设置正确且有效",
-			31360 => "下载链接超时，请刷新页面重试。若重试后仍报错，请检查普通帐号 Cookie 是否过期",
-			31362 => "下载链接签名错误，请检查 UA 是否正确",
-			999 => "错误 -> " . json_encode($body_decode)
+			8001 => "This site's SVIP account is restricted, please try again later.", // check cookie
+			9013 => "This site's SVIP account is restricted, please try again later.",
+			9019 => "This site's SVIP account is restricted, please try again later.", // check cookie
+			31360 => "Please try again later.", // link resolve timed out, check cookie
+			31362 => "Please try again later.", //Signature check failed, check if user agent is correct
+			999 => "Unknown error -> " . json_encode($body_decode)
 		];
 
 		return [
 			"error" => -1,
-			"title" => "获取下载链接失败 ($ErrorCode)",
-			"msg" => $ErrorMessage[$ErrorCode] ?? "未知错误！错误：" . json_encode($body_decode),
+			"title" => "Upstream error ($ErrorCode)",
+			"msg" => $ErrorMessage[$ErrorCode] ?? "Unknown error: " . json_encode($body_decode),
 			"message" => $message
 		];
 	}

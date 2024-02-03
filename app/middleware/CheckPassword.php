@@ -13,7 +13,7 @@ class CheckPassword
             // 密码错误
             return json([
                 'error' => -1,
-                'msg' => '网站访问密码错误',
+                'msg' => 'Access password is incorrect',
             ]);
         }
         return $next($request);

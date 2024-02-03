@@ -139,7 +139,7 @@ function SubmitLink() {
 
 		if (surl == null || surl === "") {
 			$("[name='surl']").focus();
-			Swal.fire("Tip", "未检测到有效百度网盘分享链接，请检查输入的链接", "info");
+			Swal.fire("Tip", "Link is invalid, please check the requested link", "info");
 			return false;
 		}
 	}
@@ -147,7 +147,7 @@ function SubmitLink() {
 	let pw = $("[name='pwd']").val();
 	if (pw.length !== 0 && pw.length !== 4) {
 		$("[name='pwd']").focus();
-		Swal.fire("Tip", "提取码错误，请检查", "info");
+		Swal.fire("Tip", "Extraction code is invalid", "info");
 		return false;
 	}
 
@@ -158,8 +158,8 @@ function SubmitLink() {
 }
 function addUri() {
 	Swal.fire({
-		title: '正在添加下载任务',
-		html: '请稍后...',
+		title: 'Download task was added!',
+		html: 'Please wait...',
 		allowOutsideClick: false,
 		allowEscapeKey: false,
 		allowEnterKey: false,
@@ -201,7 +201,7 @@ function addUri() {
 
 	ws.onerror = event => {
 		console.log(event);
-		Swal.fire('连接错误', 'Aria2 连接错误，请打开控制台查看详情！', 'error');
+		Swal.fire('Connection error', 'Aria2 connection error, please open the console for details!', 'error');
 	};
 	ws.onopen = () => { ws.send(JSON.stringify(json)); }
 
@@ -209,22 +209,22 @@ function addUri() {
 		console.log(event);
 		let received_msg = JSON.parse(event.data);
 		if (received_msg.error !== undefined) {
-			if (received_msg.error.code === 1) Swal.fire('通过RPC连接失败', '请打开控制台查看详细错误信息，返回信息：' + received_msg.error.message, 'error');
+			if (received_msg.error.code === 1) Swal.fire('Failed to connect via RPC', 'Please open the console to view the detailed error message and return the message:' + received_msg.error.message, 'error');
 		}
 		switch (received_msg.method) {
 			case "aria2.onDownloadStart":
-				Swal.fire('Aria2 发送成功', 'Aria2 已经开始下载！' + filename, 'success');
+				Swal.fire('Link pushed to Aria2!', 'Aria2 download has started' + filename, 'success');
 
 				localStorage.setItem('aria2wsurl', wsurl);// add aria2 config to SessionStorage
 				if (token !== "" && token != null) localStorage.setItem('aria2token', token);
 				break;
 
 			case "aria2.onDownloadError":
-				Swal.fire('下载错误', 'Aria2 下载错误！', 'error');
+				Swal.fire('Download error', 'Aria2 download error', 'error');
 				break;
 
 			case "aria2.onDownloadComplete":
-				Swal.fire('下载完成', 'Aria2 下载完成！', 'success');
+				Swal.fire('Download completed', 'Aria2 download complete', 'success');
 				break;
 
 			default:
@@ -261,13 +261,13 @@ async function getAPI(method) { // 获取 API 数据
 			const message = json.message;
 			return {
 				success: false,
-				msg: `服务器返回异常 HTTP 状态码：HTTP ${response.status} ${response.statusText}. ${message}`
+				msg: `The server returned an abnormal HTTP status code: HTTP ${response.status} ${response.statusText}. ${message}`
 			};
 		}
 	} catch (reason) { // 若与服务器连接异常
 		return {
 			success: false,
-			msg: '连接服务器过程中出现异常，消息：' + reason.message
+			msg: 'An exception occurred during the connection to the server, message:' + reason.message
 		};
 	}
 }
@@ -294,9 +294,9 @@ function navigate(path) {
 }
 async function OpenRoot(surl, pwd, password = "") {
 	Swal.fire({
-		title: "正在获取文件列表",
+		title: "Getting file listing...",
 		icon: "info",
-		html: "请稍候...",
+		html: "Please wait...",
 		allowOutsideClick: false,
 		allowEscapeKey: false,
 	});
@@ -327,23 +327,23 @@ async function OpenRoot(surl, pwd, password = "") {
 					Swal.close();
 				} else {
 					// fail
-					Swal.fire(json.title || "获取文件列表失败", json.msg, "error");
+					Swal.fire(json.title || "Failed to get file listing", json.msg, "error");
 					navigate('index');
 				}
 
 			});
 
 	} catch (reason) {
-		Swal.fire("获取文件列表失败", "连接服务器过程中出现异常，消息：" + reason.message, "error");
+		Swal.fire("Failed to get file listing", "An exception occurred during the connection to the server, message:" + reason.message, "error");
 		navigate('index');
 	}
 }
 
 async function OpenDir(path) {
 	Swal.fire({
-		title: "正在获取文件列表",
+		title: "Getting file listing...",
 		icon: "info",
-		html: "请稍候...",
+		html: "Please wait...",
 		allowOutsideClick: false,
 		allowEscapeKey: false,
 	});
@@ -373,13 +373,13 @@ async function OpenDir(path) {
 					Swal.close();
 				} else {
 					// fail
-					Swal.fire(json.title || "获取文件列表失败", json.msg, "error");
+					Swal.fire(json.title || "Failed to get file listing", json.msg, "error");
 				}
 
 			});
 
 	} catch (reason) {
-		Swal.fire("获取文件列表失败", "连接服务器过程中出现异常，消息：" + reason.message, "error");
+		Swal.fire("Failed to get file listing", "An exception occurred during the connection to the server, message:" + reason.message, "error");
 	}
 }
 
@@ -389,11 +389,11 @@ function LoadList(json) {
 	if (typeof (json) == "string") files = JSON.parse(json);
 	else files = json;
 	if (files.error !== 0) {
-		Swal.fire("无法加载列表", "请刷新页面重试，错误代码：" + files.error, "error");
+		Swal.fire("Failed to load listing", "Please try again later. Error: " + files.error, "error");
 		return;
 	}
 	window.files = files;
-	let Src = `<li class="breadcrumb-item"><a class="filename" href="javascript:OpenRoot('${files.dirdata.surl}','${files.dirdata.pwd}');">全部文件</a></li>`;
+	let Src = `<li class="breadcrumb-item"><a class="filename" href="javascript:OpenRoot('${files.dirdata.surl}','${files.dirdata.pwd}');">/</a></li>`;
 	let Dir;
 	let Active;
 	let fullsrc;
@@ -403,7 +403,7 @@ function LoadList(json) {
 		fullsrc = Dir.fullsrc.replace(/\\/g, "\\\\").replace(/&/g, '&amp;').replace(/'/g, "\\\'"); // use &amp; to replace & to avoid error
 		Src = Src + `<li class="breadcrumb-item ${Active}"><a class="filename" href="javascript:OpenDir('${fullsrc}');">${Dir.dirname}</a></li>`;
 	}
-	Src = Src + `<span class="mx-2">(${files.filenum} 个文件)<span>`;
+	Src = Src + `<span class="mx-2">(${files.filenum} files)<span>`;
 
 	$("#dir-list").html(Src);
 
@@ -446,9 +446,9 @@ function LoadList(json) {
 }
 async function Download(index = 0) {
 	Swal.fire({
-		title: "正在获取下载链接",
+		title: "Resolving download link...",
 		icon: "info",
-		html: "请稍候...",
+		html: "Please wait...",
 		allowOutsideClick: false,
 		allowEscapeKey: false,
 	});
@@ -485,13 +485,13 @@ async function Download(index = 0) {
 
 				html = `<div class="list-group">
             <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label">文件名称</label>
+                <label class="col-sm-3 col-form-label">Filename</label>
                 <div class="col-sm-9">
                     <b id="filename">${json.filedata.filename}</b>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label">文件大小</label>
+                <label class="col-sm-3 col-form-label">Size</label>
                 <div class="col-sm-9">
                     <b>${Size}</b>
                 </div>
@@ -503,7 +503,7 @@ async function Download(index = 0) {
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label">上传时间</label>
+                <label class="col-sm-3 col-form-label">Upload time</label>
                 <div class="col-sm-9">
                     <b>${Time}</b>
                 </div>
@@ -517,7 +517,7 @@ async function Download(index = 0) {
 				if (json.filedata.size <= 52428800) {
 					html = html + `
             <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label">下载地址</label>
+                <label class="col-sm-3 col-form-label">Download link</label>
                 <div class="col-sm-9 input-group">
                     <input class="form-control" id="downloadlink" aria-describedby="copy" value="${json.directlink}"/>
                     <a type="button" class="btn btn-outline-secondary" id="copy" href="${json.directlink}" target="_blank"><i class="fas fa-download"></i></a>
@@ -527,7 +527,7 @@ async function Download(index = 0) {
 				} else {
 					html = html + `
             <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label">下载地址</label>
+                <label class="col-sm-3 col-form-label">Download link</label>
                 <div class="col-sm-9 input-group">
                     <input class="form-control" id="downloadlink" aria-describedby="copy" value="${json.directlink}"/>
                     <button type="button" class="btn btn-outline-secondary" id="copy" onclick="CopyDownloadLink()"><i class="fas fa-copy"></i></button>
@@ -555,21 +555,21 @@ async function Download(index = 0) {
 				}
 
 			} else {
-				Swal.fire(json.title || "获取下载链接失败", json.msg, "error");
+				Swal.fire(json.title || "Failed to resolve download link", json.msg, "error");
 			}
 
 		});
 
 	} catch (reason) {
-		Swal.fire("获取下载链接失败", reason.message, "error");
+		Swal.fire("Failed to resolve download link", reason.message, "error");
 	}
 
 }
 function CopyDownloadLink() {
 	const Success = () => {
 		Swal.fire({
-			title: "成功复制下载链接",
-			html: "请设置下载器的 User-Agent 为 <b id='ua'>" + $("#ua").text() + "</b> 后下载，参考使用帮助",
+			title: "Copied!",
+			html: "Please set the User-Agent of the downloader to <b id='ua'>" + $("#ua").text() + "</b>. Refer to the usage page for assistance.",
 			timer: 3000,
 			timerProgressBar: true,
 			icon: "success"

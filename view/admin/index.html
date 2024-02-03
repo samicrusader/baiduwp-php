@@ -3,28 +3,28 @@
     <nav>
         <ol class="breadcrumb my-4">
             <li class="breadcrumb-item"><a href="./">baiduwp-php</a></li>
-            <li class="breadcrumb-item"><a href="javascript:navigate('index')">后台管理</a></li>
-            <li class="breadcrumb-item" id="current_path">概览</li>
+            <li class="breadcrumb-item"><a href="javascript:navigate('index')">Administration Panel</a></li>
+            <li class="breadcrumb-item" id="current_path">Stats</li>
         </ol>
     </nav>
     <!-- 概览 -->
     <div id="index" style="display: none;">
         <div class="card my-4">
 
-            <div class="card-header">账号状态检测</div>
+            <div class="card-header">Account status</div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 col-sm-12 card-item">
-                        <h5>普通账号状态</h5>
+                        <h5>Standard account status</h5>
                         <p class="card-text" id="normal_msg">
-                            正在获取账号状态...
+                            Getting account status...
                         </p>
                         <br />
                     </div>
                     <div class="col-md-6 col-sm-12 card-item">
-                        <h5>会员账号状态</h5>
+                        <h5>SVIP account status</h5>
                         <p class="card-text" id="svip_msg">
-                            正在获取账号状态...
+                            Getting account status...
                         </p>
                         <br />
                     </div>
@@ -32,29 +32,29 @@
                 <script>
                     const secondsToText = (seconds) => {
                         if (seconds <= 0) {
-                            return "已过期";
+                            return "Expired";
                         }
                         const days = Math.floor(seconds / 86400);
                         const hours = Math.floor((seconds % 86400) / 3600);
                         const mins = Math.floor((seconds % 3600) / 60);
                         if (seconds <= 3600) {
-                            return `${mins}分钟`;
+                            return `${mins}m`;
                         }
-                        return `${days}天${hours}小时`;
+                        return `${days}d${hours}h`;
                     }
 
                     const getAccountMsg = (data) => {
                         if (data.status === 0) {
-                            return `账号名称：${data.username}<br />` +
-                                `账号状态：${data.login_status === 1 ? "已登录" : "未登录"} <br />` +
-                                `账号类型：${data.svip === 2 ? "超级会员" : (data.svip === 1 ? "普通会员" : "普通账号")} <br />` +
-                                `账号到期时间：${secondsToText(data.expire_time)}`;
+                            return `Username: ${data.username}<br />` +
+                                `Account status: ${data.login_status === 1 ? "Logged in" : "Logged out"} <br />` +
+                                `Account type: ${data.svip === 2 ? "SVIP" : (data.svip === 1 ? "VIP" : "Regular")} <br />` +
+                                `Membership expires: ${secondsToText(data.expire_time)}`;
                         } else if (data.status === -6) {
-                            return "账号失效";
+                            return "Invalid";
                         } else if (data.status === -1) {
-                            return "获取失败";
+                            return "Check failed";
                         } else {
-                            return "账号状态未知: " + data.status;
+                            return "Account status unknown: " + data.status;
                         }
                     }
                     const initAccountInfo = () => {
@@ -72,50 +72,50 @@
 
         <div class="card my-4">
             <div class="card-header">
-                概览
+                Stats
             </div>
             <div class="card-body">
                 <div class="row">
 
                     <div class="col-md-6 col-sm-12">
-                        <h5 class="card-title">使用统计</h5>
+                        <h5 class="card-title">Usage</h5>
                         <p class="card-text">
-                            累计解析：<span id="all_count"></span> <br />
-                            今日解析：<span id="today_count"></span> <br />
+                            Total parsed: <span id="all_count"></span> <br />
+                            Parsed today: <span id="today_count"></span> <br />
                         </p>
-                        <button onclick="navigate('record')" class="btn btn-primary">查看详细情况</button>
+                        <button onclick="navigate('record')" class="btn btn-primary">Details</button>
                         <br><br>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <h5 class="card-title">SVIP账号</h5>
+                        <h5 class="card-title">SVIP account</h5>
                         <p class="card-text">
-                            总共账号：<span id="svip_count"></span> <br />
-                            限速账号：<span id="limit_count"></span> <br />
+                            Total accounts: <span id="svip_count"></span> <br />
+                            Restricted accounts: <span id="limit_count"></span> <br />
                         </p>
-                        <button onclick="navigate('account')" class="btn btn-primary">查看详细情况</button>
+                        <button onclick="navigate('account')" class="btn btn-primary">Details</button>
                         <br><br>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <h5 class="card-title">黑/白名单</h5>
+                        <h5 class="card-title">Blacklist/whitelist</h5>
                         <p class="card-text">
-                            黑名单：<span id="black_count"></span> <br />
-                            白名单：<span id="white_count"></span> <br />
+                            Blacklisted: <span id="black_count"></span> <br />
+                            Whitelisted: <span id="white_count"></span> <br />
                         </p>
-                        <button onclick="navigate('ip')" class="btn btn-primary">查看详细情况</button>
+                        <button onclick="navigate('ip')" class="btn btn-primary">Details</button>
                         <br><br>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <h5 class="card-title">网站设置</h5>
+                        <h5 class="card-title">Settings</h5>
                         <p class="card-text">
-                            站点名称：<span id="site_name"></span> <br />
-                            允许下载次数：<span id="download_times"></span> <br />
-                            允许下载流量：<span id="download_flow"></span> <br />
-                            检查账号限速：<span id="check_limit"></span> <br />
-                            随机使用账号：<span id="random_account"></span> <br />
+                            Site name: <span id="site_name"></span> <br />
+                            Downloads per IP: <span id="download_times"></span> <br />
+                            Download traffic per IP: <span id="download_flow"></span> <br />
+                            Check limits?: <span id="check_limit"></span> <br />
+                            Account randomization: <span id="random_account"></span> <br />
                         </p>
-                        <button onclick="navigate('setting')" class="btn btn-primary">查看详细情况</button>
+                        <button onclick="navigate('setting')" class="btn btn-primary">Details</button>
                         <br><br>
                     </div>
                 </div>
@@ -150,10 +150,10 @@
                                     $("#site_name").html(setting.site_name);
                                     $("#download_times").html(setting.download_times);
                                     $("#download_flow").html(setting.download_flow + " GB");
-                                    $("#check_limit").html(setting.check_speed_limit ? "是" : "否");
-                                    $("#random_account").html(setting.random_account ? "是" : "否");
+                                    $("#check_limit").html(setting.check_speed_limit ? "Yes" : "No");
+                                    $("#random_account").html(setting.random_account ? "Yes" : "No");
                                 } else {
-                                    Swal.fire("获取数据失败", json.msg, "error");
+                                    Swal.fire("Failed to get data", json.msg, "error");
                                 }
                             });
                     }
